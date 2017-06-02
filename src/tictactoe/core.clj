@@ -69,12 +69,6 @@
 
 (opponent "X")
 
- ;; (defn mini-max
- ;;  [board player-value]
- ;;  (if (not= (has-empty-cells? board) nil)
- ;;    (map #(mini-max % (opponent player-value)) (for [x (range 3)]
- ;;           (for [y (range 3)](println (mark-cell board x y player-value)))))))
-
 (defn draw?
   [board]
   (and (= (has-empty-cells? board) nil) (or  (= (win? (flatten board) "X") nil)) (= (win? (flatten board) "O") nil)))
@@ -124,7 +118,6 @@
     (let [spots (available-spots board)
           scores (map #(max-scores (mark-cell board (quot % 3) (rem % 3) player-value) player-value (opponent player-value) 0) spots)
           best-move-index (nth spots (.indexOf scores  (apply max scores)))]
-          ;;best-move-index (get spots (.indexOf scores (max scores)))]
       {(quot best-move-index 3) (rem best-move-index 3)})))
 
 (best-move board-2 "O")

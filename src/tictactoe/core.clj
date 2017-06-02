@@ -103,6 +103,11 @@
 
 (def board-2 [["O" " " "O"] ["X" "X" "O"] [" " " " "X"]])
 
+(defn available-spots
+  [board]
+  (map first (filter #(= " " (second %)) (map-indexed vector (flatten board)))))
+
+(available-spots board)
 
 (defn max-scores
   [board player-value player-chance depth]
@@ -113,23 +118,16 @@
 
 (max-scores board-2 "X" "O" 0)
 
-(defn mini-max
+(defn best-move
   [board player-value]
   (if (= (has-empty-cells? board) true)
     (let [spots (available-spots board)
-          scores (map #(max-scores (mark-cell board (quot % 3) (rem % 3) player-value) player-value (opponent player-value) 0) spots)]
-      1))
+          scores (map #(max-scores (mark-cell board (quot % 3) (rem % 3) player-value) player-value (opponent player-value) 0) spots)
+          best-move-index (nth spots (.indexOf scores  (apply max scores)))]
+          ;;best-move-index (get spots (.indexOf scores (max scores)))]
+      {(quot best-move-index 3) (rem best-move-index 3)})))
 
-(mini-max board-2 "X")
-
-(defn available-spots
-   [board]
-  (map first (filter #(= " " (second %)) (map-indexed vector (flatten board)))))
-
-(available-spots board)
-
-;(min-max board 0 true)
-;(move board)
+(best-move board-2 "O")
 
 (defn -main
   "I don't do a whole lot ... yet."
